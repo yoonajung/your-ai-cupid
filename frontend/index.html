@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your AI Cupid</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: #171717;
+    border-right: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 15px;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.chat-history {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.chat-item {
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 6px;
+    background-color: #2a2a2a;
+    cursor: pointer;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.chat-item:hover {
+    background-color: #333;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    background-color: #1a1a1a;
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.new-chat-btn {
+    background-color: #4a9eff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    min-height: 44px;
+}
+
+.new-chat-btn:hover {
+    background-color: #3a8eef;
+}
+
+.subtitle {
+    text-align: center;
+    padding: 15px 20px;
+    font-size: 16px;
+    color: #ccc;
+    border-bottom: 1px solid #333;
+}
+
+.persona-buttons {
+    padding: 15px 20px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.persona-btn {
+    background-color: #2a2a2a;
+    color: #ccc;
+    border: 1px solid #444;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.persona-btn:hover {
+    background-color: #333;
+}
+
+.persona-btn.active {
+    background-color: #4a9eff;
+    color: white;
+    border-color: #4a9eff;
+}
+
+.example-questions {
+    padding: 20px;
+    border-bottom: 1px solid #333;
+    background-color: #171717;
+}
+
+.example-questions h3 {
+    color: #fff;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.question-item {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.question-item:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.question-item:last-child {
+    margin-bottom: 0;
+}
+
+.chat-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #1a1a1a;
+}
+
+.message {
+    margin-bottom: 15px;
+    max-width: 80%;
+}
+
+.user-message {
+    margin-left: auto;
+    text-align: right;
+}
+
+.message-content {
+    padding: 12px 16px;
+    border-radius: 18px;
+    display: inline-block;
+    max-width: 100%;
+    line-height: 1.5;
+}
+
+.user-message .message-content {
+    background-color: #4a9eff;
+    color: white;
+}
+
+.ai-message .message-content {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+.ai-message .message-content strong {
+    color: #4a9eff;
+}
+
+.ai-message .message-content em {
+    color: #ccc;
+    font-style: italic;
+}
+
+.input-area {
+    padding: 20px;
+    border-top: 1px solid #333;
+    background-color: #1a1a1a;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.message-input {
+    flex: 1;
+    padding: 12px 16px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 25px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    min-height: 44px;
+}
+
+.message-input::placeholder {
+    color: #888;
+}
+
+.send-btn {
+    background-color: #4a9eff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    min-height: 44px;
+}
+
+.send-btn:hover {
+    background-color: #3a8eef;
+}
+
+/* 모바일 디바이스용 반응형 디자인 */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        height: 100vh;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 10px 15px;
+        order: 2;
+        max-height: 150px;
+        border-right: none;
+        border-top: 1px solid #333;
+    }
+    
+    .sidebar h2 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    .chat-history {
+        max-height: 100px;
+    }
+    
+    .main-content {
+        order: 1;
+        flex: 1;
+        min-height: 0;
+    }
+    
+    .header {
+        padding: 12px 15px;
+    }
+    
+    .app-title {
+        font-size: 18px;
+    }
+    
+    .new-chat-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .subtitle {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+    
+    .persona-buttons {
+        padding: 15px;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+    
+    .persona-btn {
+        padding: 10px 14px;
+        font-size: 12px;
+        border-radius: 16px;
+        min-width: auto;
+        flex: 1;
+        min-height: 44px;
+    }
+    
+    .example-questions {
+        padding: 15px;
+    }
+    
+    .example-questions h3 {
+        font-size: 15px;
+        margin-bottom: 12px;
+    }
+    
+    .question-item {
+        padding: 14px 16px;
+        font-size: 13px;
+        margin-bottom: 6px;
+        min-height: 48px;
+    }
+    
+    .chat-container {
+        padding: 15px;
+        flex: 1;
+        min-height: 0;
+    }
+    
+    .message {
+        max-width: 90%;
+        margin-bottom: 12px;
+    }
+    
+    .message-content {
+        padding: 12px 14px;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    .input-area {
+        padding: 15px;
+    }
+    
+    .input-container {
+        gap: 8px;
+        max-width: none;
+    }
+    
+    .message-input {
+        padding: 14px 16px;
+        font-size: 16px;
+        min-height: 48px;
+    }
+    
+    .send-btn {
+        padding: 14px 16px;
+        font-size: 14px;
+        min-height: 48px;
+        min-width: 60px;
+    }
+}
+
+/* 작은 모바일 화면 (iPhone SE 등) */
+@media (max-width: 375px) {
+    .persona-buttons {
+        flex-direction: column;
+    }
+    
+    .persona-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .header {
+        padding: 10px 12px;
+    }
+    
+    .chat-container {
+        padding: 12px;
+    }
+    
+    .input-area {
+        padding: 12px;
+    }
+}
+
+/* iOS Safari 특화 스타일 */
+@supports (-webkit-touch-callout: none) {
+    .message-input {
+        font-size: 16px; /* iOS 줌 방지 */
+    }
+    
+    .send-btn {
+        -webkit-appearance: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .persona-btn, .question-item, .new-chat-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>대화 기록</h2>
+        <div class="chat-history" id="chatHistory">
+            <div class="chat-item">오늘 첫 대화</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="app-title">Your AI Cupid</div>
+            <button class="new-chat-btn" onclick="newChat()">+ New Chat</button>
+        </div>
+        
+        <div class="subtitle">
+            AI 큐피드와 대화를 시작해 보세요!
+        </div>
+
+        <div class="persona-buttons">
+            <button class="persona-btn active" onclick="selectPersona('코치 큐피트')">❤️ 코치 큐피트</button>
+            <button class="persona-btn" onclick="selectPersona('닥터 하트')">🧠 닥터 하트</button>
+            <button class="persona-btn" onclick="selectPersona('인생 멘토')">📚 인생 멘토</button>
+            <button class="persona-btn" onclick="selectPersona('든든한 내 편')">❤️ 든든한 내 편</button>
+            <button class="persona-btn" onclick="selectPersona('베프')">⭐ 베프</button>
+        </div>
+
+        <div class="example-questions">
+            <h3>이런 대화로 시작해 볼까요?</h3>
+            <div class="question-item" onclick="sendExampleQuestion('사소한 일로 자꾸 연인이랑 싸워요.')">
+                • 사소한 일로 자꾸 연인이랑 싸워요.
+            </div>
+            <div class="question-item" onclick="sendExampleQuestion('싸우지 않고 어려운 얘기를 꺼내는 법 좀 알려주세요.')">
+                • 싸우지 않고 어려운 얘기를 꺼내는 법 좀 알려주세요.
+            </div>
+            <div class="question-item" onclick="sendExampleQuestion('점점 관계가 소원해지는 것 같은 친구가 있어요. 어떻게 해야 하죠?')">
+                • 점점 관계가 소원해지는 것 같은 친구가 있어요. 어떻게 해야 하죠?
+            </div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message ai-message">
+                <div class="message-content">
+                    안녕하세요! 당신의 AI 관계 코치, AI 큐피드예요. 무슨 고민 있어요? 연애든 인간관계든, 뭐든지 솔직하게 털어놔 보세요. 제가 있잖아요.
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-container">
+                <input type="text" class="message-input" placeholder="메시지를 입력하세요..." id="messageInput" onkeypress="handleKeyPress(event)">
+                <button class="send-btn" onclick="sendMessage()">전송</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPersona = '코치 큐피트';
+
+        const personaMessages = {
+            '코치 큐피트': '안녕하세요! 당신의 AI 관계 코치, AI 큐피드예요. 무슨 고민 있어요? 연애든 인간관계든, 뭐든지 솔직하게 털어놔 보세요. 제가 있잖아요.',
+            '닥터 하트': '안녕하세요. 심리학 박사 닥터 하트입니다. 관계에서 겪는 심리적 어려움이나 패턴에 대해 전문적인 관점에서 도움을 드릴 수 있습니다. 편하게 말씀해 주세요.',
+            '인생 멘토': '안녕하세요, 인생의 선배로서 조언을 드리는 멘토입니다. 살면서 쌓은 경험과 지혜를 바탕으로 당신의 고민에 답해드리겠습니다. 어떤 이야기든 들어보겠습니다.',
+            '든든한 내 편': '안녕! 힘든 일 있었구나? 괜찮아, 내가 여기 있잖아. 무슨 일이든 들어줄 테니까 편하게 털어놓으렴. 당신 편에서 응원해줄게.',
+            '베프': '야 안녕! 무슨 일이야? 연애 문제? 친구 문제? 뭐든 좋으니까 털어놔봐. 베프로서 솔직하게 조언해줄게!'
+        };
+
+        // 마크다운을 HTML로 변환하는 함수
+        function formatAIResponse(text) {
+            return text
+                // 볼드체: **텍스트** → <strong>텍스트</strong>
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                // 기울임체: *텍스트* → <em>텍스트</em>  
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                // 인라인 코드: `텍스트` → <code>텍스트</code>
+                .replace(/`(.*?)`/g, '<code style="background-color: #333; padding: 2px 4px; border-radius: 3px; color: #fff;">$1</code>')
+                // 줄바꿈 처리
+                .replace(/\n/g, '<br>')
+                // 번호 목록 처리: 1. 텍스트
+                .replace(/^(\d+)\.\s/gm, '<strong>$1.</strong> ')
+                // 불릿 포인트: - 텍스트 또는 • 텍스트
+                .replace(/^[-•]\s/gm, '• ');
+        }
+
+        function selectPersona(persona) {
+            currentPersona = persona;
+            
+            // 버튼 활성화 상태 변경
+            document.querySelectorAll('.persona-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 채팅창에 페르소나 인사말 표시 (포맷팅 적용)
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = `
+                <div class="message ai-message">
+                    <div class="message-content">${formatAIResponse(personaMessages[persona])}</div>
+                </div>
+            `;
+        }
+
+        function newChat() {
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = `
+                <div class="message ai-message">
+                    <div class="message-content">${formatAIResponse(personaMessages[currentPersona])}</div>
+                </div>
+            `;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendExampleQuestion(question) {
+            document.getElementById('messageInput').value = question;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const container = document.getElementById('chatContainer');
+            
+            if (input.value.trim()) {
+                const userMessage = input.value;
+                
+                // 사용자 메시지 표시
+                container.innerHTML += `
+                    <div class="message user-message">
+                        <div class="message-content">${userMessage}</div>
+                    </div>
+                `;
+                input.value = '';
+                
+                try {
+                    // 백엔드 서버에 메시지 전송
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            message: userMessage,
+                            persona: currentPersona 
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // AI 응답 표시 (마크다운 포맷팅 적용)
+                    container.innerHTML += `
+                        <div class="message ai-message">
+                            <div class="message-content">${formatAIResponse(data.message)}</div>
+                        </div>
+                    `;
+                    
+                } catch (error) {
+                    container.innerHTML += `
+                        <div class="message ai-message">
+                            <div class="message-content">오류: 서버 연결에 실패했습니다.</div>
+                        </div>
+                    `;
+                }
+                
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>
