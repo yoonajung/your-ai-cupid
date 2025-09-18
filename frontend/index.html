@@ -174,11 +174,21 @@ body {
     max-height: none;
 }
 
-/* 모바일에서만 스크롤 방식 변경 */
+/* 모바일 전체 스크롤 완전 해결 */
 @media (max-width: 768px) {
-    .chat-container {
+    body {
+        height: auto;
         overflow-y: auto;
-        max-height: calc(100vh - 300px);
+    }
+    
+    .main-content {
+        height: auto;
+    }
+    
+    .chat-container {
+        overflow-y: visible;
+        max-height: none;
+        height: auto;
     }
 }
 
