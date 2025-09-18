@@ -115,9 +115,9 @@ body {
     font-size: 13px;
     transition: all 0.2s;
     min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    text-align: center;
+    line-height: 1.3;
 }
 
 .persona-btn:hover {
@@ -172,6 +172,14 @@ body {
     overflow-y: visible;
     background-color: #1a1a1a;
     max-height: none;
+}
+
+/* 모바일에서만 스크롤 방식 변경 */
+@media (max-width: 768px) {
+    .chat-container {
+        overflow-y: auto;
+        max-height: calc(100vh - 300px);
+    }
 }
 
 .message {
