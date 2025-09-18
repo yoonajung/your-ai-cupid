@@ -169,6 +169,7 @@ body {
 .chat-container {
     flex: 1;
     padding: 20px;
+    padding-bottom: 120px;
     overflow-y: visible;
     background-color: #1a1a1a;
     max-height: none;
@@ -233,6 +234,11 @@ body {
     padding: 20px;
     border-top: 1px solid #333;
     background-color: #1a1a1a;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
 }
 
 .input-container {
@@ -438,9 +444,7 @@ body {
 <body>
     <div class="sidebar">
         <h2>대화 기록</h2>
-        <div class="chat-history" id="chatHistory">
-            <div class="chat-item">오늘 첫 대화</div>
-        </div>
+        
     </div>
 
     <div class="main-content">
