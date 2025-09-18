@@ -169,8 +169,9 @@ body {
 .chat-container {
     flex: 1;
     padding: 20px;
-    overflow-y: auto;
+    overflow-y: visible;
     background-color: #1a1a1a;
+    max-height: none;
 }
 
 .message {
@@ -435,10 +436,10 @@ body {
         </div>
 
         <div class="persona-buttons">
-            <button class="persona-btn active" onclick="selectPersona('코치 큐피트')">❤️ 코치 큐피트</button>
-            <button class="persona-btn" onclick="selectPersona('닥터 하트')">🧠 닥터 하트</button>
-            <button class="persona-btn" onclick="selectPersona('인생 멘토')">📚 인생 멘토</button>
-            <button class="persona-btn" onclick="selectPersona('든든한 내 편')">❤️ 든든한 내 편</button>
+            <button class="persona-btn active" onclick="selectPersona('코치 큐피트')">❤️ 코치<br>큐피트</button>
+            <button class="persona-btn" onclick="selectPersona('닥터 하트')">🧠 닥터<br>하트</button>
+            <button class="persona-btn" onclick="selectPersona('인생 멘토')">📚 인생<br>멘토</button>
+            <button class="persona-btn" onclick="selectPersona('든든한 내 편')">❤️ 든든한<br>내 편</button>
             <button class="persona-btn" onclick="selectPersona('베프')">⭐ 베프</button>
         </div>
 
