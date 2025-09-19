@@ -175,24 +175,6 @@ body {
     max-height: none;
 }
 
-/* 모바일 전체 스크롤 완전 해결 */
-@media (max-width: 768px) {
-    body {
-        height: auto;
-        overflow-y: auto;
-    }
-    
-    .main-content {
-        height: auto;
-    }
-    
-    .chat-container {
-        overflow-y: visible;
-        max-height: none;
-        height: auto;
-    }
-}
-
 .message {
     margin-bottom: 15px;
     max-width: 80%;
@@ -281,9 +263,11 @@ body {
 
 /* 모바일 디바이스용 반응형 디자인 */
 @media (max-width: 768px) {
+   
     body {
         flex-direction: column;
-        height: 100vh;
+        height: auto;
+        overflow-y: auto;
     }
     
     .sidebar {
@@ -309,6 +293,7 @@ body {
         order: 1;
         flex: 1;
         min-height: 0;
+        height: auto;
     }
     
     .header {
@@ -329,20 +314,28 @@ body {
         font-size: 15px;
     }
     
-    .persona-buttons {
-        padding: 15px;
-        justify-content: flex-start;
-        gap: 8px;
-    }
-    
-    .persona-btn {
-        padding: 10px 14px;
-        font-size: 12px;
-        border-radius: 16px;
-        min-width: auto;
-        flex: 1;
-        min-height: 44px;
-    }
+   .persona-buttons {
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.persona-btn {
+    padding: 12px 8px;
+    font-size: 12px;
+    border-radius: 16px;
+    min-height: 48px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* 5번째 버튼(베프) 중앙 배치 */
+.persona-btn:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    max-width: calc(50% - 5px);
+}
     
     .example-questions {
         padding: 15px;
@@ -364,6 +357,8 @@ body {
         padding: 15px;
         flex: 1;
         min-height: 0;
+        overflow-y: visible;
+        max-height: none;
     }
     
     .message {
